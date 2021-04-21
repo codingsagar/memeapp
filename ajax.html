@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enjoy Meme!!</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      #loadPhoto {
+        background: #15d798;
+        border-radius: 1000px;
+        padding: 10px 20px;
+        color: #ffffff;
+        display: inline-block;
+        font: normal bold 20px/1 "Ubuntu", sans-serif;
+        text-align: center;
+        border: none;
+        margin: 10px;
+      }
+      #loadPhoto:hover{
+          background: brown;
+      }
+      #photo {
+        border: 2px solid black;
+        border-radius: 5px;
+        height: 80vh;
+      }
+      h3 {
+        text-align: center;
+        margin: 5px;
+        font-family: verdana;
+      }
+      p {
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: red;
+        margin-bottom: 10px;
+      }
+      @media (max-width: 600px) {
+        #photo {
+          width: 85vw;
+          height: 75vh;
+        }
+        
+      }
+      @media (max-width: 300px) {
+        #photo {
+          width: 85vw;
+          height: 65vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Enjoy Memes !! 😉</h3>
+    <p>
+      The memes are generated using API,so it may contain some disturbing memes.
+    </p>
+    <div class="main">
+      <img src="https://i.redd.it/edbuht2dcdu61.jpg" alt="" id="photo" />
+      <button id="loadPhoto">New Meme</button>
+    </div>
+
+    <script>
+      console.log("The code is working.");
+      var loadBtn = document.getElementById("loadPhoto");
+      loadBtn.addEventListener("click", () => {
+        // console.log("Load Btn is clicked");
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://meme-api.herokuapp.com/gimme", true);
+
+        xhr.onprogress = () => {
+          //   console.log("New meme is loading");
+          document.getElementById("photo").src = "loading.gif";
+        };
+
+        // xhr.onreadystatechange = () =>
+        //   console.log("ready state is ", xhr.readyState);
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            // console.log(xhr.responseText);
+            var data = JSON.parse(xhr.responseText);
+            var url = data.url;
+            if (url.includes("imgur")) {
+              document.getElementById("photo").src =
+                "https://i.redd.it/edbuht2dcdu61.jpg";
+              // console.log("Image was imgur");
+            } else {
+              document.getElementById("photo").src = url;
+            }
+            console.log("Data fetched from api");
+          } else {
+            console.log("Some error occured");
+          }
+        };
+
+        xhr.send();
+      });
+    </script>
+  </body>
+</html>
